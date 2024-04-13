@@ -15,7 +15,7 @@ string validOption(){
             getline(cin, value);
 
             if(value.size() > 1){
-                throw "muchos valores o valores no validos";
+                throw "muchos valores";
             }
 
             if(value != "1" && value != "2"){
@@ -65,16 +65,13 @@ int validSeed(int tam){
 
 string convertBinary(char character){
     int value = character;
-    int residue;
     string binary = "";
 
-    while(value > 0){
-        residue = value % 2;
-        value /= 2;
-        binary = to_string(residue) + binary;
+    // Realizar la conversión del número a su forma de byte
+    for (int i = 7; i >= 0; i--) {
+        int bit = (value >> i) & 1;  // Obtener el bit en la posición i
+        binary += '0' + bit;  // Convertir el bit a carácter y agregarlo a la cadena
     }
-
-    binary = "0" + binary;
 
     return binary;
 

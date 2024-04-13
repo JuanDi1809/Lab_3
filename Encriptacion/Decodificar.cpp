@@ -2,6 +2,8 @@
 #include <limits>
 #include <fstream>
 #include <cstring>
+#include <cmath>
+#include "manejoArchivos2.h"
 
 using namespace std;
 
@@ -66,18 +68,19 @@ int validSeed2(int tam){
     return num;
 }
 
-int contCharacter2(char caracter, char* text){
+int contCharacter2(char caracter, char text[]){
     int cont = 0;
+    int size = strlen(text);
 
-    while(text[cont] != '\0'){
-        cont++;
+    for(int i = 0; i < size; i++){
+        if(text[i] == caracter) cont++;
     }
 
     return cont;
 }
 
 
-char* drule1(char* data, int num){
+void drule1(char data[], int num){
 
     int crease = num + 1;
     int limit = strlen(data);
@@ -90,66 +93,127 @@ char* drule1(char* data, int num){
             data[i] = '1';
         }
     }
-
-    return data;
 }
 
-/*
+
 char* decodedMethod1(const char *text, int value){
     int size = strlen(text);
     int modify = size / value;
     int pos = 0;
+
     char* decode = new char[size + 1];
     char auxBlock[value];
 
+    auxBlock[value] = '\0';
+    decode[0] = '\0';
+
     for(int i = 0; i < modify; i++){
-        char valueBinary[value];
         char block[value];
         strncpy(block,text + pos, value);
+        block[value] = '\0';
 
         if(i == 0){
-            valueBinary = rule1(block, 0);
+            drule1(block, 0);
         }
         else{
-            int cantOne = contCharacter('1', auxBlock);
+            int cantOne = contCharacter2('1', auxBlock);
             int cantZero = value - cantOne; //Recordar que value es la semilla
 
             if(cantOne == cantZero){
-                valueBinary = rule1(block, 0);
+                drule1(block, 0);
             }
             else if(cantZero > cantOne){
-                valueBinary = rule1(block, 1);
+                drule1(block, 1);
             }
             else{
-                valueBinary = rule1(block, 2);
+                drule1(block, 2);
             }
 
         }
 
-        strcat(decode, valueBinary);
-        strncpy(auxBlock, valueBinary, value);
+        strncat(decode, block, strlen(block));
+        strncpy(auxBlock, block, value);
         pos += value;
+    }
+
+    int res =strlen(text) % value ;
+
+    if(res != 0){
+        char block[res];
+        block[res] = '\0';
+
+        strncpy(block,text + strlen(text) - res, res);
+        strncat(decode, block, strlen(block));
+
+        return decode;
     }
 
     return decode;
 
 }
-*/
+
+int binaryToDecimal(char block[]) {
+    int decimalValue = 0;
+    int power = 0; // Para mantener el valor de 2 elevado a la potencia correspondiente
+
+    // Recorremos la cadena de bits de derecha a izquierda
+    for (int i = strlen(block) - 1; i >= 0; i--) {
+        if (block[i] == '1') {
+            decimalValue += pow(2, power); // Sumamos 2 elevado a la potencia actual
+        }
+        power++; // Incrementamos la potencia para el siguiente bit
+    }
+
+    return decimalValue;
+}
+
+char* goToText(char* binary){
+    int size = strlen(binary) / 8;
+    int pos = 0;
+
+    char block[9];
+    char* text = new char[size + 1];
+    text[0] = '\0';
+
+    for(int i = 0; i < size; i++){
+        strncpy(block,binary + pos, 8);
+
+        int valueDecimal = binaryToDecimal(block);
+        char c = valueDecimal;
+
+        text[i] = c;
+        pos += 8;
+    }
+
+    text[size] = '\0';
+    cout << text;
+
+    return text;
+}
+
 
 void secondProgram(){
 
-    int method = validOption2();
-    //char* inputFileName = verifyFile();
-    //char* fileCodify =  readFile(inputFileName);
-    //int seed = validSeed(strlen(fileCodify));
+    int method2 = validOption2();
+    char* inputFileName2 = verifyFile2();
+    char* fileCodify =  readFile(inputFileName2);
+    int seed2 = validSeed2(strlen(fileCodify));
 
-    /*
     char* decoded;
-    if(method == 1){
-        decoded = decodedMethod1(fileCodify, seed);
+    if(method2 == 1){
+        decoded = decodedMethod1(fileCodify, seed2);
+    }
+    else{
+        cout << "parte 2";
     }
 
-    delete[] inputFileName;
+    char* text = goToText(decoded);
+
+
+
+
+    delete[] inputFileName2;
     delete[] fileCodify;
-    */
+    delete[] text;
+    delete[] decoded;
 }

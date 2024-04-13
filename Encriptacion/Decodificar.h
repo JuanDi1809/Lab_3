@@ -23,7 +23,7 @@ int validSeed2(int tam);
  * @param text
  * @return
  */
-int contCharacter2(char caracter, char* text);
+int contCharacter2(char caracter, char text[]);
 
 /**
  * @brief rule1
@@ -31,7 +31,7 @@ int contCharacter2(char caracter, char* text);
  * @param num
  * @return
  */
-char* drule1(char* data, int num);
+void drule1(char data[], int num);
 
 /**
  * @brief decodedMethod1

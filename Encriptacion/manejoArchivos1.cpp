@@ -11,7 +11,7 @@ string verifyFile(){
 
     while(true){
         try{
-            cout << "Ingrese el nombre del archivo de (formato .txt): ";
+            cout << "Ingrese el nombre del archivo de entrada (formato .txt): ";
             getline(cin, name);
 
             if(name.substr(name.size() - 4, 4 ) != ".txt"){
@@ -42,7 +42,7 @@ string fileBinary(string name){
     ifstream file;
     string binaryText = "";
 
-    file.open(name, ios::in);
+    file.open(name,ios::binary);
 
     try{
         if(!file.is_open()){
@@ -78,7 +78,7 @@ void writeFile(string data){
     }
 
     ofstream file;
-    file.open(name, ios::out);
+    file.open(name, ios::out | ios::binary);
 
     try{
         if(!file.is_open()){
