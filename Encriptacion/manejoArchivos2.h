@@ -13,4 +13,11 @@ char* verifyFile2();
  * @return
  */
 char* readFile(const char* name);
+
+/**
+ * @brief writeFile2
+ * @param data
+ */
+void writeFile2(const char* data);
+
 #endif // MANEJOARCHIVOS2_H

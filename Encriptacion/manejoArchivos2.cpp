@@ -6,7 +6,7 @@
 using namespace std;
 
 char* verifyFile2() {
-    char name[256]; // Tamaño máximo del nombre del archivo
+    char name[100]; // Tamaño máximo del nombre del archivo
     cin.clear();
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
@@ -49,7 +49,7 @@ char* readFile(const char* name) {
 
     try {
         if (!file.is_open()) {
-            throw runtime_error("no se logró abrir el archivo");
+            throw runtime_error("no se logro abrir el archivo");
         }
 
         // Obtener el tamaño del archivo
@@ -58,7 +58,7 @@ char* readFile(const char* name) {
         file.seekg(0, ios::beg);
 
         // Asignar memoria para almacenar el contenido del archivo
-        binaryText = new char[fileSize + 1]; // +1 para el carácter nulo terminador
+        binaryText = new char[fileSize + 1]; // +1 para el caracter nulo
         binaryText[fileSize] = '\0';
 
         // Leer el contenido del archivo
@@ -78,3 +78,35 @@ char* readFile(const char* name) {
 
     return binaryText;
 }
+
+void writeFile2(const char* data) {
+    char name[100];  // Se asume que el nombre del archivo no excederá los 100 caracteres
+    cin.clear();
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+
+    while (true) {
+        cout << "Ingrese el nombre del archivo de salida (formato .txt): ";
+        cin.getline(name, 100);
+
+        if (strlen(name) >= 4 && strcmp(name + strlen(name) - 4, ".txt") == 0) {
+            break;
+        }
+    }
+
+    ofstream file(name, ios::binary);
+
+    try {
+        if (!file.is_open()) {
+            throw runtime_error("No se pudo crear o abrir el archivo");
+        }
+
+        file.write(data, strlen(data));
+
+    } catch (const exception& ex) {
+        cerr << "Error: " << ex.what() << endl;
+    }
+
+    file.close();
+}
+

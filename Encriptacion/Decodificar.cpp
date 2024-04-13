@@ -109,7 +109,7 @@ char* decodedMethod1(const char *text, int value){
 
     for(int i = 0; i < modify; i++){
         char block[value];
-        strncpy(block,text + pos, value);
+        strncpy(block,text + pos, value); //Me crea una copia de una parte del texto que deseo
         block[value] = '\0';
 
         if(i == 0){
@@ -131,12 +131,12 @@ char* decodedMethod1(const char *text, int value){
 
         }
 
-        strncat(decode, block, strlen(block));
-        strncpy(auxBlock, block, value);
+        strncat(decode, block, strlen(block)); //Agrego el bloque de la funcion que converti a decode
+        strncpy(auxBlock, block, value); // Creo una copia de block para poder hacer los cambios respectos a los bits convertidos
         pos += value;
     }
 
-    int res =strlen(text) % value ;
+    int res = strlen(text) % value ;
 
     if(res != 0){
         char block[res];
@@ -186,9 +186,54 @@ char* goToText(char* binary){
     }
 
     text[size] = '\0';
-    cout << text;
 
     return text;
+}
+
+
+//Para decoidificar por el segundo metodo
+void drule2(char* data){
+
+    size = strlen(data);
+    char auxData[size+ 1];
+    auxData[size] = '\0';
+
+    data[size - 1] = auxData[0];
+
+    for(int i = size - 2; i >= 0; i--){
+        data[i] = auxData[i + 1];
+    }
+}
+
+char* deocodedMethod2(char* text, int value){
+    int modify = strlen(text) / value;
+    int posInicial = 0;
+
+    char* decoded[strlen(text) + 1];
+    codify[strlen(tetx)] = '\0';
+
+    for(int i = 0; i < modify; i++){
+        char block[value +1];
+        block[value] = '\0';
+        strncpy(block,text + pos, value);
+        drule2(block);
+
+        strncat(decoded, block, strlen(block));
+        posInicial += value;
+    }
+
+    int res = text.size() % value;
+
+    if( res != 0){
+        char block[res];
+        block[res] = '\0';
+
+        strncpy(block,text + strlen(text) - res, res);
+        strncat(decoded, block, strlen(block));
+    }
+
+    return decoded;
+
 }
 
 
@@ -204,13 +249,11 @@ void secondProgram(){
         decoded = decodedMethod1(fileCodify, seed2);
     }
     else{
-        cout << "parte 2";
+        decoded = deocodedMethod2(fileCodify, seed2);
     }
 
     char* text = goToText(decoded);
-
-
-
+    writeFile2(text);
 
     delete[] inputFileName2;
     delete[] fileCodify;
